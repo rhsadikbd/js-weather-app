@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JS Weather APP</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="card">
+      <div class="search">
+        <input type="text" placeholder="Write city name" />
+        <button><img src="./images/search.png" alt="search image" /></button>
+      </div>
+      <div class="weather">
+        <img src="./images/rain.png" alt="" class="weather-icon" />
+        <h1 class="temp">27°C</h1>
+        <h2 class="city">Dhaka</h2>
+        <div class="details">
+          <div class="col">
+            <img src="./images/humidity.png" alt="" />
+            <div>
+              <p class="humidity">50%</p>
+              <p>Humidity</p>
+            </div>
+          </div>
+          <div class="col">
+            <img src="./images/wind.png" alt="" />
+            <div>
+              <p class="wind">50km/h</p>
+              <p>Wind Speed</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const apiKey = "08aceb0ae939dfa2a4201809c839ebdf";
+      const apiUrl =
+        "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
+      const searchBox = document.querySelector(".search input");
+      const searchBtn = document.querySelector(".search button");
+      const weatherIcon = document.querySelector(".weather-icon");
+
+      async function checkWeather(city) {
+        const response = await fetch(apiUrl + city + `&appid=${apiKey}`);
+        var data = await response.json();
+        console.log(data);
+        document.querySelector(".city").innerHTML = data.name;
+        document.querySelector(".temp").innerHTML =
+          Math.round(data.main.temp) + "°C";
+        document.querySelector(".humidity").innerHTML =
+          data.main.humidity + "%";
+        document.querySelector(".wind").innerHTML = data.wind.speed + " km/h";
+
+        switch (data.weather[0].main) {
+          case "Clear":
+            weatherIcon.src = "images/clear.png";
+            break;
+
+          case "Clouds":
+            weatherIcon.src = "images/clouds.png";
+            break;
+
+          case "Drizzle":
+            weatherIcon.src = "images/drizzle.png";
+            break;
+
+          case "Mist":
+            weatherIcon.src = "images/mist.png";
+            break;
+
+          case "Rain":
+            weatherIcon.src = "images/rain.png";
+            break;
+
+          case "Snow":
+            weatherIcon.src = "images/snow.png";
+            break;
+          default:
+            weatherIcon.innerHTML = "no Image";
+        }
+      }
+      searchBtn.addEventListener("click", function () {
+        checkWeather(searchBox.value);
+      });
+    </script>
+  </body>
+</html>
